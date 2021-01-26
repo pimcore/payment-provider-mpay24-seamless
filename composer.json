@@ -1,0 +1,27 @@
+{
+  "name": "pimcore/payment-provider-mpay24-seamless",
+  "license": "GPL-3.0+",
+  "type": "pimcore-bundle",
+  "config": {
+    "sort-packages": true
+  },
+  "require": {
+    "mpay24/mpay24-php": "^4.2",
+    "pimcore/pimcore": "^6.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pimcore\\Bundle\\EcommerceFrameworkBundle\\": "src/"
+    }
+  },
+  "extra": {
+    "pimcore": {
+      "bundles": [
+        "Pimcore\\Bundle\\EcommerceFrameworkBundle\\PimcorePaymentProviderMpay24SeamlessBundle"
+      ]
+    },
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
+}
