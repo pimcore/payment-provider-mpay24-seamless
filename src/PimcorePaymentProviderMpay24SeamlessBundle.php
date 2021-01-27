@@ -12,7 +12,7 @@
 namespace Pimcore\Bundle\EcommerceFrameworkBundle;
 
 
-use Pimcore\Bundle\EcommerceFrameworkBundle\Hobex\Installer;
+use Pimcore\Bundle\EcommerceFrameworkBundle\Mpay24Seamless\Installer;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 use Pimcore\Extension\Bundle\Traits\PackageVersionTrait;
 
