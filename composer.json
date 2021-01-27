@@ -2,6 +2,7 @@
   "name": "pimcore/payment-provider-mpay24-seamless",
   "license": "GPL-3.0+",
   "type": "pimcore-bundle",
+  "description": "Pimcore Payment Provider - MPay24 Seamless",
   "config": {
     "sort-packages": true
   },
