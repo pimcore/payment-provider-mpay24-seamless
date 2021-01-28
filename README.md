@@ -1,15 +1,62 @@
-# Pimcore E-Commerce Framework Payment Provider - MPay24
+# Pimcore E-Commerce Framework Payment Provider - MPay24 Seamless
 
+### Official MPay24 Documentation
 * [Documentation](https://docs.mpay24.com/docs)
 * [Test Data](https://docs.mpay24.com/docs/test-data) 
 
 ## Requirement
-Mpay24 PHP SDK, which can be installed by adding the composer requirement named "mpay24/mpay24-php": "^4.2".
+- mpay24/mpay24-php": "^4.2"
 
+## Installation
+
+Install latest version with Composer:
+```bash 
+composer require pimcore/payment-provider-mpay24-seamless
+```
+
+Enable bundle via console or extensions manager in Pimcore backend:
+```bash
+php bin/console pimcore:bundle:enable PimcorePaymentProviderMpay24SeamlessBundle
+php bin/console pimcore:bundle:install PimcorePaymentProviderMpay24SeamlessBundle
+```
 
 ## Configuration
+The Payment Manager is responsible for implementation
+of different Payment Provider to integrate them into the framework. 
 
-Inside your ecommerce.yml configuration, activate the MPay24 provider.  
+For more information about Payment Manager, see 
+[Payment Manager Docs](../13_Checkout_Manager/07_Integrating_Payment.md). 
+
+Configure payment provider in the `pimcore_ecommerce_config.payment_manager` config section: 
+```yaml
+pimcore_ecommerce_config:
+    payment_manager:
+        payment_manager_id: Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\PaymentManager
+
+        providers:
+            mpay24:
+                provider_id: Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\Payment\Mpay24Seamless
+                profile: testsystem
+                profiles:
+                  _defaults:
+                      #paypal_activate_item_level: true
+                      partial: Shared/Includes/Shop/Payment/paymentMethods.html.php
+                      payment_methods:
+                          cc:
+                          paypal:
+                          sofort:
+                          invoice:
+                  testsystem:
+                      merchant_id: 95387
+                      password: 7&jcQ%v6RB
+                      testSystem: true
+                      debugMode: true
+                  live:
+                      merchant_id: todo
+                      password: todo
+                      testSystem: false
+                      debugMode: false
+```
 
 ## Implementation
 
