@@ -26,7 +26,7 @@ class PimcorePaymentProviderMpay24SeamlessBundle extends AbstractPimcoreBundle
     /**
      * {@inheritdoc}
      */
-    protected function getComposerPackageName()
+    protected function getComposerPackageName(): string
     {
         return 'pimcore/payment-provider-mpay24-seamless';
     }
