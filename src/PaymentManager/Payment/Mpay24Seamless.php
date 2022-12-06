@@ -43,7 +43,7 @@ use Symfony\Component\Templating\EngineInterface;
 class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\V7\Payment\PaymentInterface
 {
     /**
-     * @var string[]
+     * @var array
      */
     private $ecommerceConfig;
 
@@ -391,7 +391,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
     /**
      * Handles response of payment provider and creates payment status object.
      *
-     * @param array $response
+     * @param StatusInterface|array $response
      *
      * @return StatusInterface
      *
