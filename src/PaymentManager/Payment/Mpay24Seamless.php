@@ -144,7 +144,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
      * @param PriceInterface $price
      * @param array $config
      *
-     * @return FormBuilderInterface
+     * @return string
      *
      * @throws \Exception
      */
