@@ -28,3 +28,19 @@ parameters:
 			message: "#^Call to method getPriceModifications\\(\\) on an unknown class Pimcore\\\\Model\\\\DataObject\\\\OnlineShopOrder\\.$#"
 			count: 1
 			path: src/PaymentManager/Payment/Mpay24Seamless.php
+		-
+			message: "#^Call to method getAmount\\(\\) on an unknown class Pimcore\\\\Model\\\\DataObject\\\\Fieldcollection\\\\Data\\\\OrderPriceModifications\\.$#"
+			count: 1
+			path: src/PaymentManager/Payment/Mpay24Seamless.php
+		-
+			message: "#^Call to method getNetAmount\\(\\) on an unknown class Pimcore\\\\Model\\\\DataObject\\\\Fieldcollection\\\\Data\\\\OrderPriceModifications\\.$#"
+			count: 1
+			path: src/PaymentManager/Payment/Mpay24Seamless.php
+		-
+			message: "#^Call to method getName\\(\\) on an unknown class Pimcore\\\\Model\\\\DataObject\\\\Fieldcollection\\\\Data\\\\OrderPriceModifications\\.$#"
+			count: 1
+			path: src/PaymentManager/Payment/Mpay24Seamless.php
+		-
+			message: "#^PHPDoc tag \\@var for variable \\$modification contains unknown class Pimcore\\\\Model\\\\DataObject\\\\Fieldcollection\\\\Data\\\\OrderPriceModifications\\.$#"
+			count: 1
+			path: src/PaymentManager/Payment/Mpay24Seamless.php
