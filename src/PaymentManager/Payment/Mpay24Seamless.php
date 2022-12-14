@@ -28,7 +28,6 @@ use Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\V7\Payment\StartPayme
 use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface;
 use Pimcore\Model\DataObject\Fieldcollection\Data\OrderPriceModifications;
 use Pimcore\Model\DataObject\OnlineShopOrder;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Exception\NotImplementedException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -144,7 +143,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
      * @param PriceInterface $price
      * @param array $config
      *
-     * @return FormBuilderInterface
+     * @return string
      *
      * @throws \Exception
      */
@@ -232,7 +231,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
             }
 
             $payment = [
-                'amount' => round($order->getTotalPrice(), 2) * 100, //value in cent
+                'amount' => round((float) $order->getTotalPrice(), 2) * 100, //value in cent
                 'currency' => $order->getCurrency(),
                 'manualClearing' => 'false',       // Optional: set to true if you want to do a manual clearing
                 'useProfile' => 'false',       // Optional: set if you want to create a profile
@@ -250,7 +249,8 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
 
             // All fields are optional, but most of them are highly recommended
             //@see https://docs.mpay24.com/docs/paypal for extensions (payment - method specific)
-            $customerName = $order->getCustomer() ? $order->getCustomer()->getLastname().' '.$order->getCustomer()->getFirstname() : '';
+            $customer = $order->getCustomer();
+            $customerName = $order->getCustomer() ? $customer->getLastname().' '.$customer->getFirstname() : '';
             $additional = [
                 'customerID' => $order->getCustomer() ? $order->getCustomer()->getId() : '', // ensure GDPR compliance
                 'customerName' => $customerName, // ensure GDPR compliance
