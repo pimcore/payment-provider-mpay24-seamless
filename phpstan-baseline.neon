@@ -13,6 +13,6 @@ parameters:
             count: 1
             path: src/PaymentManager/Payment/Mpay24Seamless.php
         -
-            message: "#^Call to method [w+]\\(\\) on an unknown class Pimcore\\\\Model\\\\DataObject\\\\OnlineShopOrder\\.$#"
+            message: "#^Call to method [w]+\\(\\) on an unknown class Pimcore\\\\Model\\\\DataObject\\\\OnlineShopOrder\\.$#"
             count: 4
             path: src/PaymentManager/Payment/Mpay24Seamless.php
