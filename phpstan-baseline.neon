@@ -1,18 +1,18 @@
 parameters:
 	ignoreErrors:
-        -
-            message: "#^Call to an undefined method Pimcore\\\\Model\\\\Element\\\\AbstractElement\\:\\:getFirstname\\(\\)\\.$#"
-            count: 1
-            path: src/PaymentManager/Payment/Mpay24Seamless.php
-        -
-            message: "#^Call to an undefined method Pimcore\\\\Model\\\\Element\\\\AbstractElement\\:\\:getLastname\\(\\)\\.$#"
-            count: 1
-            path: src/PaymentManager/Payment/Mpay24Seamless.php
-        -
-            message: "#^Parameter \\$order of method Pimcore\\\\Bundle\\\\EcommerceFrameworkBundle\\\\PaymentManager\\\\Payment\\\\Mpay24Seamless\\:\\:addOrderItemPositions\\(\\) has invalid type Pimcore\\\\Model\\\\DataObject\\\\OnlineShopOrder\\.$#"
-            count: 1
-            path: src/PaymentManager/Payment/Mpay24Seamless.php
-        -
-            message: "#^Call to method [w]+\\(\\) on an unknown class Pimcore\\\\Model\\\\DataObject\\\\OnlineShopOrder\\.$#"
-            count: 4
-            path: src/PaymentManager/Payment/Mpay24Seamless.php
+		-
+			message: "#^Call to an undefined method Pimcore\\\\Model\\\\Element\\\\AbstractElement\\:\\:getFirstname\\(\\)\\.$#"
+			count: 1
+			path: src/PaymentManager/Payment/Mpay24Seamless.php
+		-
+			message: "#^Call to an undefined method Pimcore\\\\Model\\\\Element\\\\AbstractElement\\:\\:getLastname\\(\\)\\.$#"
+			count: 1
+			path: src/PaymentManager/Payment/Mpay24Seamless.php
+		-
+			message: "#^Parameter \\$order of method Pimcore\\\\Bundle\\\\EcommerceFrameworkBundle\\\\PaymentManager\\\\Payment\\\\Mpay24Seamless\\:\\:addOrderItemPositions\\(\\) has invalid type Pimcore\\\\Model\\\\DataObject\\\\OnlineShopOrder\\.$#"
+			count: 1
+			path: src/PaymentManager/Payment/Mpay24Seamless.php
+		-
+			message: "#^Call to method [w]+\\(\\) on an unknown class Pimcore\\\\Model\\\\DataObject\\\\OnlineShopOrder\\.$#"
+			count: 4
+			path: src/PaymentManager/Payment/Mpay24Seamless.php
