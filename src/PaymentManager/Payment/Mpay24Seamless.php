@@ -30,7 +30,6 @@ use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface;
 use Pimcore\Model\DataObject\Fieldcollection\Data\OrderPriceModifications;
 use Pimcore\Model\DataObject\OnlineShopOrder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Exception\NotImplementedException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Templating\EngineInterface;
 
@@ -397,7 +396,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
      *
      * @throws \Exception
      */
-    public function handleResponse(StatusInterface|array $response): StatusInterface
+    public function handleResponse(StatusInterface | array $response): StatusInterface
     {
         $mpay24 = new Mpay24($this->getMpay24Config());
         $params = $mpay24->paymentStatusByTID($response['TID']); //example with merchant TransaktionID
