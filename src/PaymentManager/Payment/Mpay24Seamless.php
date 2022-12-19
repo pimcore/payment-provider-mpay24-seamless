@@ -19,6 +19,7 @@ use Mpay24\Mpay24;
 use Mpay24\Mpay24Config;
 use Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
 use Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractPaymentInformation;
+use Pimcore\Bundle\EcommerceFrameworkBundle\Model\ProductInterface;
 use Pimcore\Bundle\EcommerceFrameworkBundle\OrderManager\OrderAgentInterface;
 use Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\Status;
 use Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\StatusInterface;
@@ -28,7 +29,6 @@ use Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\V7\Payment\StartPayme
 use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface;
 use Pimcore\Model\DataObject\Fieldcollection\Data\OrderPriceModifications;
 use Pimcore\Model\DataObject\OnlineShopOrder;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Exception\NotImplementedException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -43,7 +43,7 @@ use Symfony\Component\Templating\EngineInterface;
 class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\V7\Payment\PaymentInterface
 {
     /**
-     * @var string[]
+     * @var array
      */
     private $ecommerceConfig;
 
@@ -144,7 +144,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
      * @param PriceInterface $price
      * @param array $config
      *
-     * @return FormBuilderInterface
+     * @return string
      *
      * @throws \Exception
      */
@@ -232,7 +232,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
             }
 
             $payment = [
-                'amount' => round($order->getTotalPrice(), 2) * 100, //value in cent
+                'amount' => round((float) $order->getTotalPrice(), 2) * 100, //value in cent
                 'currency' => $order->getCurrency(),
                 'manualClearing' => 'false',       // Optional: set to true if you want to do a manual clearing
                 'useProfile' => 'false',       // Optional: set if you want to create a profile
@@ -250,9 +250,11 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
 
             // All fields are optional, but most of them are highly recommended
             //@see https://docs.mpay24.com/docs/paypal for extensions (payment - method specific)
-            $customerName = $order->getCustomer() ? $order->getCustomer()->getLastname().' '.$order->getCustomer()->getFirstname() : '';
+            /** @var \Pimcore\Model\DataObject\Customer|null $customer */
+            $customer = $order->getCustomer();
+            $customerName = $customer ? $customer->getLastname().' '.$customer->getFirstname() : '';
             $additional = [
-                'customerID' => $order->getCustomer() ? $order->getCustomer()->getId() : '', // ensure GDPR compliance
+                'customerID' => $customer ? $order->getCustomer()->getId() : '', // ensure GDPR compliance
                 'customerName' => $customerName, // ensure GDPR compliance
                 'order' =>
                     [
@@ -330,23 +332,25 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
         $checkSum = 0.0;
         $checkSumVat = 0.0;
 
-        $orderTotalPrice = round($order->getTotalPrice(), 2);
-        $orderTotalVat = round($orderTotalPrice - $order->getTotalNetPrice(), 2);
+        $orderTotalPrice = round((float) $order->getTotalPrice(), 2);
 
         $pos = 1;
         $additional['order']['shoppingCart'] = [];
         foreach ($order->getItems() as $orderItem) {
-            $totalPrice = round($orderItem->getTotalPrice(), 2);
-            $vat = round($totalPrice - $orderItem->getTotalNetPrice(), 2);
+            $totalPrice = round((float) $orderItem->getTotalPrice(), 2);
+            $vat = round($totalPrice - (float) $orderItem->getTotalNetPrice(), 2);
             $checkSum += $totalPrice;
 
             $itemPrice = round($totalPrice / $orderItem->getAmount(), 2);
             $itemVat = round($vat / $orderItem->getAmount(), 2);
             $checkSumVat += $itemVat * $orderItem->getAmount();
 
+            /** @var ProductInterface $product */
+            $product = $orderItem->getProduct();
+
             $additional['order']['shoppingCart']['item-'.$pos] = [
-                'productNr' => $orderItem->getProduct()->getOSProductNumber(),
-                'description' => $orderItem->getProduct()->getOSName(),
+                'productNr' => $product->getOSProductNumber(),
+                'description' => $product->getOSName(),
                 'quantity' => $orderItem->getAmount(),
                 'tax' => round($itemVat * 100, 2),
                 'amount' => round($itemPrice * 100, 2),
@@ -356,8 +360,8 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
 
         /** @var OrderPriceModifications $modification */
         foreach ($order->getPriceModifications() as $modification) {
-            $totalPrice = round($modification->getAmount(), 2);
-            $vat = round($totalPrice - $modification->getNetAmount(), 2);
+            $totalPrice = round((float) $modification->getAmount(), 2);
+            $vat = round($totalPrice - (float) $modification->getNetAmount(), 2);
             $checkSum += $totalPrice;
             $checkSumVat += $vat;
 
@@ -374,8 +378,8 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
         }
 
         if (round($checkSum, 2) != $orderTotalPrice) {
-            $difference = $order->getTotalPrice() - $checkSum;
-            $differenceVat = round($order->getTotalPrice() - $order->getTotalNetPrice(), 2) - $checkSumVat;
+            $difference = (float) $order->getTotalPrice() - $checkSum;
+            $differenceVat = round((float)$order->getTotalPrice() - (float)$order->getTotalNetPrice(), 2) - $checkSumVat;
             $additional['order']['shoppingCart']['item-'.$pos] = [
                 'productNr' => 'Balance',
                 'description' => 'Balance',
@@ -391,7 +395,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
     /**
      * Handles response of payment provider and creates payment status object.
      *
-     * @param array $response
+     * @param StatusInterface|array $response
      *
      * @return StatusInterface
      *
