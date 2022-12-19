@@ -250,10 +250,11 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
 
             // All fields are optional, but most of them are highly recommended
             //@see https://docs.mpay24.com/docs/paypal for extensions (payment - method specific)
-            /** @var \Pimcore\Model\DataObject\Customer $customerName */
-            $customerName = $order->getCustomer() ? $order->getCustomer()->getLastname().' '.$order->getCustomer()->getFirstname() : '';
+            /** @var \Pimcore\Model\DataObject\Customer|null $customer */
+            $customer = $order->getCustomer();
+            $customerName = $customer ? $customer->getLastname().' '.$customer->getFirstname() : '';
             $additional = [
-                'customerID' => $order->getCustomer() ? $order->getCustomer()->getId() : '', // ensure GDPR compliance
+                'customerID' => $customer ? $customer->getId() : '', // ensure GDPR compliance
                 'customerName' => $customerName, // ensure GDPR compliance
                 'order' =>
                     [
