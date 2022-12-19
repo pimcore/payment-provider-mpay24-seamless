@@ -144,7 +144,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
      * @param PriceInterface $price
      * @param array $config
      *
-     * @return FormBuilderInterface
+     * @return string
      *
      * @throws \Exception
      */
@@ -232,7 +232,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
             }
 
             $payment = [
-                'amount' => round($order->getTotalPrice(), 2) * 100, //value in cent
+                'amount' => round((float) $order->getTotalPrice(), 2) * 100, //value in cent
                 'currency' => $order->getCurrency(),
                 'manualClearing' => 'false',       // Optional: set to true if you want to do a manual clearing
                 'useProfile' => 'false',       // Optional: set if you want to create a profile
@@ -331,7 +331,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
         $checkSum = 0.0;
         $checkSumVat = 0.0;
 
-        $orderTotalPrice = round($order->getTotalPrice(), 2);
+        $orderTotalPrice = round((float) $order->getTotalPrice(), 2);
         $orderTotalVat = round($orderTotalPrice - $order->getTotalNetPrice(), 2);
 
         $pos = 1;
