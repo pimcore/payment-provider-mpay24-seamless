@@ -6,7 +6,7 @@ use Pimcore\Model\DataObject\Exception\InheritanceParentNotFoundException;
 
 class PaymentProvider extends \Pimcore\Model\DataObject\Objectbrick {
 
-protected $brickGetters = ['PaymentProviderPayPalSmartButton'];
+protected $brickGetters = ['PaymentProviderMpay24'];
 
 
 protected $PaymentProviderPayPalSmartButton = null;
