@@ -30,7 +30,6 @@ use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface;
 use Pimcore\Model\DataObject\Fieldcollection\Data\OrderPriceModifications;
 use Pimcore\Model\DataObject\OnlineShopOrder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Exception\NotImplementedException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Templating\EngineInterface;
 
@@ -395,13 +394,9 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
     /**
      * Handles response of payment provider and creates payment status object.
      *
-     * @param StatusInterface|array $response
-     *
-     * @return StatusInterface
-     *
      * @throws \Exception
      */
-    public function handleResponse($response)
+    public function handleResponse(StatusInterface | array $response): StatusInterface
     {
         $mpay24 = new Mpay24($this->getMpay24Config());
         $params = $mpay24->paymentStatusByTID($response['TID']); //example with merchant TransaktionID
@@ -434,20 +429,12 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
         return $responseStatus;
     }
 
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'Mpay24';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getAuthorizedData()
+    public function getAuthorizedData(): array
     {
         return $this->authorizedData;
     }
@@ -466,31 +453,20 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
      *  if price is given, recurPayment command is executed
      *  if no price is given, amount from authorized Data is used and deposit command is executed
      *
-     * @param PriceInterface $price
-     * @param string $reference
-     *
-     * @return StatusInterface
-     *
      * @throws \Exception
      */
-    public function executeDebit(PriceInterface $price = null, $reference = null)
+    public function executeDebit(PriceInterface $price = null, string $reference = null): StatusInterface
     {
-        throw new NotImplementedException('executeDebit is not implemented yet.');
+        throw new \Exception('executeDebit is not implemented yet.');
     }
 
     /**
      * Executes credit
      *
-     * @param PriceInterface $price
-     * @param string $reference
-     * @param string $transactionId
-     *
-     * @return StatusInterface
-     *
      * @throws \Exception
      */
-    public function executeCredit(PriceInterface $price, $reference, $transactionId)
+    public function executeCredit(PriceInterface $price, string $reference, string $transactionId): StatusInterface
     {
-        throw new NotImplementedException('executeCredit is not implemented yet.');
+        throw new \Exception('executeCredit is not implemented yet.');
     }
 }
