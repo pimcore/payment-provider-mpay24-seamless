@@ -253,7 +253,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
             $customer = $order->getCustomer();
             $customerName = $customer ? $customer->getLastname().' '.$customer->getFirstname() : '';
             $additional = [
-                'customerID' => $customer ? $customer->getId() : '', // ensure GDPR compliance
+                'customerID' => $customer ? $order->getCustomer()->getId() : '', // ensure GDPR compliance
                 'customerName' => $customerName, // ensure GDPR compliance
                 'order' =>
                     [
@@ -336,7 +336,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
         $pos = 1;
         $additional['order']['shoppingCart'] = [];
         foreach ($order->getItems() as $orderItem) {
-            $totalPrice = round($orderItem->getTotalPrice(), 2);
+            $totalPrice = round((float) $orderItem->getTotalPrice(), 2);
             $vat = round($totalPrice - (float) $orderItem->getTotalNetPrice(), 2);
             $checkSum += $totalPrice;
 
@@ -356,7 +356,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
 
         /** @var OrderPriceModifications $modification */
         foreach ($order->getPriceModifications() as $modification) {
-            $totalPrice = round($modification->getAmount(), 2);
+            $totalPrice = round((float) $modification->getAmount(), 2);
             $vat = round($totalPrice - $modification->getNetAmount(), 2);
             $checkSum += $totalPrice;
             $checkSumVat += $vat;
