@@ -19,6 +19,7 @@ use Mpay24\Mpay24;
 use Mpay24\Mpay24Config;
 use Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
 use Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractPaymentInformation;
+use Pimcore\Bundle\EcommerceFrameworkBundle\Model\ProductInterface;
 use Pimcore\Bundle\EcommerceFrameworkBundle\OrderManager\OrderAgentInterface;
 use Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\Status;
 use Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\StatusInterface;
@@ -344,9 +345,12 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
             $itemVat = round($vat / $orderItem->getAmount(), 2);
             $checkSumVat += $itemVat * $orderItem->getAmount();
 
+            /** @var ProductInterface $product */
+            $product = $orderItem->getProduct();
+
             $additional['order']['shoppingCart']['item-'.$pos] = [
-                'productNr' => $orderItem->getProduct()->getOSProductNumber(),
-                'description' => $orderItem->getProduct()->getOSName(),
+                'productNr' => $product->getOSProductNumber(),
+                'description' => $product->getOSName(),
                 'quantity' => $orderItem->getAmount(),
                 'tax' => round($itemVat * 100, 2),
                 'amount' => round($itemPrice * 100, 2),
@@ -357,7 +361,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
         /** @var OrderPriceModifications $modification */
         foreach ($order->getPriceModifications() as $modification) {
             $totalPrice = round((float) $modification->getAmount(), 2);
-            $vat = round($totalPrice - $modification->getNetAmount(), 2);
+            $vat = round($totalPrice - (float) $modification->getNetAmount(), 2);
             $checkSum += $totalPrice;
             $checkSumVat += $vat;
 
@@ -374,7 +378,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
         }
 
         if (round($checkSum, 2) != $orderTotalPrice) {
-            $difference = $order->getTotalPrice() - $checkSum;
+            $difference = (float) $order->getTotalPrice() - $checkSum;
             $differenceVat = round((float)$order->getTotalPrice() - (float)$order->getTotalNetPrice(), 2) - $checkSumVat;
             $additional['order']['shoppingCart']['item-'.$pos] = [
                 'productNr' => 'Balance',
