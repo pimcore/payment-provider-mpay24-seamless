@@ -332,13 +332,12 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
         $checkSumVat = 0.0;
 
         $orderTotalPrice = round((float) $order->getTotalPrice(), 2);
-        $orderTotalVat = round($orderTotalPrice - $order->getTotalNetPrice(), 2);
 
         $pos = 1;
         $additional['order']['shoppingCart'] = [];
         foreach ($order->getItems() as $orderItem) {
             $totalPrice = round($orderItem->getTotalPrice(), 2);
-            $vat = round($totalPrice - $orderItem->getTotalNetPrice(), 2);
+            $vat = round($totalPrice - (float) $orderItem->getTotalNetPrice(), 2);
             $checkSum += $totalPrice;
 
             $itemPrice = round($totalPrice / $orderItem->getAmount(), 2);
@@ -376,7 +375,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
 
         if (round($checkSum, 2) != $orderTotalPrice) {
             $difference = $order->getTotalPrice() - $checkSum;
-            $differenceVat = round($order->getTotalPrice() - $order->getTotalNetPrice(), 2) - $checkSumVat;
+            $differenceVat = round((float)$order->getTotalPrice() - (float)$order->getTotalNetPrice(), 2) - $checkSumVat;
             $additional['order']['shoppingCart']['item-'.$pos] = [
                 'productNr' => 'Balance',
                 'description' => 'Balance',
