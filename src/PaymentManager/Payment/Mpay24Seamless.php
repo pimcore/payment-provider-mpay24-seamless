@@ -326,6 +326,9 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
         return [];
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     private function addOrderItemPositions(OnlineShopOrder $order, string $paymentType, array $additional): array
     {
         $checkSum = 0.0;
