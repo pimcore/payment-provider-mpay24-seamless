@@ -177,7 +177,7 @@ class PaymentController extends AbstractController\AbstractFrontendController
         /** @var Mpay24Seamless $payment */
         $payment = $checkoutManager->getPayment();
         $paymentInfo = $checkoutManager->startOrderPayment();
-        $paymentType = $request->get('type');
+        $paymentType = $request->request->getString('type');
 
         if ($request->isMethod('post')) {
             if ($request->isMethod('post') && $paymentType == 'INVOICE') {
@@ -237,7 +237,7 @@ class PaymentController extends AbstractController\AbstractFrontendController
             $serviceShop->getCart()
         );
 
-        $type = $request->get('type');
+        $type = $request->request->getString('type');
         if ($type == 'confirmation') {
             //@see https://docs.mpay24.com/docs/backend2backend-integration
             $this->getLogger()->info('Mpay24 called confirmation URL.');
