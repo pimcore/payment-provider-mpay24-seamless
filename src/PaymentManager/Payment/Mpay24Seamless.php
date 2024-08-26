@@ -222,7 +222,7 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
         }
 
         $mpay24 = new \Mpay24\Mpay24($this->getMpay24Config());
-        $paymentType = $request->request->getString('type');
+        $paymentType = $request->get('type');
 
         if ($request->isMethod('post') && isset($paymentType)) {
             $order = $config['order'];
@@ -237,13 +237,13 @@ class Mpay24Seamless extends AbstractPayment implements \Pimcore\Bundle\Ecommerc
                 'useProfile' => 'false',       // Optional: set if you want to create a profile
             ];
 
-            $payment['token'] = $request->request->getString('token');
+            $payment['token'] = $request->get('token');
             switch ($paymentType) {
                 case 'CC':
                     $paymentType = 'TOKEN';
                     break;
                 case 'TOKEN':
-                    $payment['token'] = $request->request->getString('token');
+                    $payment['token'] = $request->get('token');
                     break;
             }
 
