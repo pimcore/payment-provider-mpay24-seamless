@@ -9,12 +9,10 @@
   "prefer-stable": true,
   "minimum-stability": "dev",
   "require": {
+    "php": "~8.4.0 || ~8.5.0",
     "mpay24/mpay24-php": "^4.2",
-    "pimcore/pimcore": "^11.2",
-    "pimcore/ecommerce-framework-bundle": "^1.0"
-  },
-  "conflict": {
-    "pimcore/pimcore": "v11.0.0-ALPHA1 || v11.0.0-ALPHA2"
+    "pimcore/pimcore": "^2026.1.0",
+    "pimcore/ecommerce-framework-bundle": "^2026.1.0"
   },
   "require-dev": {
     "phpstan/phpstan": "^1.10.5"
@@ -30,6 +28,9 @@
     }
   },
   "extra": {
+    "branch-alias": {
+      "dev-2026.x": "2026.1.x-dev"
+    },
     "pimcore": {
       "bundles": [
         "Pimcore\\Bundle\\EcommerceFrameworkBundle\\PimcorePaymentProviderMpay24SeamlessBundle"
