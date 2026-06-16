@@ -8,3 +8,5 @@ class _ProbeStatusClient
         return (string) @file_get_contents('https://api.mpay24.com/status');
     }
 }
+
+
