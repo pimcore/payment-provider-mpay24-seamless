@@ -5,8 +5,6 @@ class _ProbeStatusClient
 {
     public function ping(): string
     {
-        return (string) @file_get_contents('https://api.mpay24.com/status');
+        return (string) @file_get_contents('https://api.mpay24.com/status/');
     }
 }
-
-
