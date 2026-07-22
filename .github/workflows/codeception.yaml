@@ -36,6 +36,10 @@ jobs:
 
         - name: Checkout code
           uses: actions/checkout@v5
+          with:
+              # Build the test matrix from the PR base branch's composer.json, not the
+              # fork's — keeps the matrix trigger-agnostic and unaffected by PR contents.
+              ref: ${{ github.event.pull_request.base.ref || github.ref }}
 
         - name: Checkout reusable workflow repo
           uses: actions/checkout@v5
