@@ -4,7 +4,17 @@
   "type": "pimcore-bundle",
   "description": "Pimcore Payment Provider - MPay24 Seamless",
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "policy": {
+      "advisories": {
+        "ignore": [
+          "pimcore/admin-ui-classic-bundle",
+          "pimcore/ecommerce-framework-bundle",
+          "pimcore/personalization-bundle",
+          "pimcore/pimcore"
+        ]
+      }
+    }
   },
   "prefer-stable": true,
   "minimum-stability": "dev",
